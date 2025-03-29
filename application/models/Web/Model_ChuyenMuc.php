@@ -24,10 +24,18 @@ class Model_ChuyenMuc extends CI_Model {
 	}
 
 	public function getAllCategory($start = 0, $end = 6){
-		$sql = "SELECT cm.TenChuyenMuc, cm.DuongDan AS DuongDanChuyenMuc, cm.HinhAnh AS HinhAnhChuyenMuc, COUNT(sp.MaSanPham) AS SoLuongSanPham FROM chuyenmuc cm LEFT JOIN sanpham sp ON cm.MaChuyenMuc = sp.MaChuyenMuc WHERE cm.TrangThai = 1 GROUP BY cm.TenChuyenMuc, cm.DuongDan ORDER BY cm.MaChuyenMuc DESC LIMIT ?, ?";
+		$sql = "SELECT cm.MaChuyenMuc, cm.TenChuyenMuc, cm.DuongDan AS DuongDanChuyenMuc, cm.HinhAnh AS HinhAnhChuyenMuc,
+				COUNT(sp.MaSanPham) AS SoLuongSanPham
+				FROM chuyenmuc cm
+				LEFT JOIN sanpham sp ON cm.MaChuyenMuc = sp.MaChuyenMuc
+				WHERE cm.TrangThai = 1
+				GROUP BY cm.MaChuyenMuc, cm.TenChuyenMuc, cm.DuongDan, cm.HinhAnh
+				ORDER BY cm.MaChuyenMuc DESC
+				LIMIT ?, ?";
 		$result = $this->db->query($sql, array($start, $end));
 		return $result->result_array();
 	}
+	
 
 	public function getById($MaChuyenMuc){
 		$sql = "SELECT * FROM chuyenmuc WHERE MaChuyenMuc = ? AND TrangThai = 1";
