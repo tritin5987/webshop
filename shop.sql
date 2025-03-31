@@ -48,7 +48,7 @@ CREATE TABLE `cauhinh` (
 --
 
 INSERT INTO `cauhinh` (`TenWebsite`, `MoTaWeb`, `Logo`, `DiaChi`, `Email`, `SoDienThoai`, `PhiShip`, `MienPhiShip`, `QRNganHang`, `ChuTaiKhoan`, `SoTaiKhoan`, `ApiKey`, `NganHang`) VALUES
-('LinhKienNhanh.VN', 'Website bán linh kiện máy tính trực tuyến', 'http://localhost/webshop/uploads/logo-hacom-since-2001.png', 'Hà Nội', 'lienhe@gmail.com', '0379962045', 30000, 500000, 'http://localhost/webshop/uploads/z5204981674939_cb87935e11dde5ee3dc2641f5eb6d604.jpg', 'NGUYEN TIEN DAT', '103899752777', 'AK_CS.f01326b07e3811efa2f1b114d48992ca.BMkmPgnwsMgkJCNCg8karhppbnnggIRVLY9aaIvQU9xnWVPaZxCaKKG7WlMkmHHA5rPua01C', 'vietinbank');
+('LinhKienNhanh.VN', 'Website bán linh kiện máy tính trực tuyến', 'http://localhost/webshop/uploads/logo-hacom-since-2001.png', 'Hà Nội', 'bdtcloner1@gmail', '0988342551', 30000, 500000, 'http://localhost/webshop/uploads/z5204981674939_cb87935e11dde5ee3dc2641f5eb6d604.jpg', 'BUI DUONG TRI', '0988342551', 'AK_CS.dd0325a0088c11f097089522635f3f80.ihvGrRv9Peo7Euss1tg9qmmIk7AaJB6bT9eM8K5oBXAKvsfFMY54VjQAUogKqAQSruBWklYl', 'MB BANK');
 
 -- --------------------------------------------------------
 
