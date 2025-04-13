@@ -165,6 +165,9 @@ class SanPham extends CI_Controller {
 
 	public function update($masanpham)
 	{
+		if ($this->session->userdata('phanquyen') != 1) {
+			show_error('Bạn không có quyền truy cập chức năng này.', 403);
+		}
 		if(count($this->Model_SanPham->getById($masanpham)) <= 0){
 			$this->session->set_flashdata('error', 'Sản phẩm không tồn tại!');
 			return redirect(base_url('admin/san-pham/'));
