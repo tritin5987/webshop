@@ -128,6 +128,43 @@
 </footer>
 <!-- END FOOTER -->
 
+<!-- START CHATBOT WIDGET -->
+<link rel="stylesheet" href="<?php echo base_url('public/web/assets/css/chatbot.css') ?>">
+<div class="chatbot-widget">
+    <!-- Bong bóng Chat -->
+    <div class="chatbot-toggle">
+        <i class="linearicons-bubble"></i>
+    </div>
+    
+    <!-- Khung chat -->
+    <div class="chatbot-box">
+        <div class="chatbot-header">
+            <div class="bot-info">
+                <div class="bot-avatar">
+                    <i class="linearicons-bubble"></i>
+                </div>
+                <div class="bot-name">
+                    <h5>Trợ Lý Linh Kiện</h5>
+                    <span>Online tự động</span>
+                </div>
+            </div>
+            <button class="chatbot-close"><i class="linearicons-cross"></i></button>
+        </div>
+        
+        <div class="chatbot-body">
+            <!-- Tin nhắn sẽ được thêm qua JS -->
+        </div>
+        
+        <div class="chatbot-footer">
+            <input type="text" class="chatbot-input" placeholder="Nhập tin nhắn hoặc mã đơn hàng...">
+            <button class="chatbot-send">
+                <i class="linearicons-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- END CHATBOT WIDGET -->
+
 <a href="#" class="scrollup" style="display: none;"><i class="ion-ios-arrow-up"></i></a> 
 
 <!-- Latest jQuery --> 
@@ -160,7 +197,10 @@
 <script src="<?php echo base_url('public/web/') ?>assets/js/jquery.elevatezoom.js"></script>
 <!-- scripts js --> 
 <script src="<?php echo base_url('public/web/') ?>assets/js/scripts.js"></script>
+<!-- Chatbot script -->
+<script src="<?php echo base_url('public/web/') ?>assets/js/chatbot.js"></script>
 
 </body>
 </html>
+
 

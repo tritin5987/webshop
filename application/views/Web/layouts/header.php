@@ -54,7 +54,7 @@
                 <div class="col-lg-6 col-md-8">
                     <div class="header_topbar_info">
                         <div class="download_wrap">
-                            <span class="me-3">Miễn phí giao hàng với đơn hàng lớn hơn 50,000 VND</span>
+                            <span class="me-3">Miễn phí giao hàng với đơn hàng lớn hơn 500,000 VND</span>
                         </div>
                     </div>
                 </div>

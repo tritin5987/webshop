@@ -46,6 +46,11 @@ class DangNhap extends MY_Controller {
 					);
 					$this->session->set_userdata($newdata);
 
+					// Sinh session token cho chatbot và dọn dẹp các phiên cũ hơn 10
+					$chat_token = uniqid('chat_', true);
+					$this->session->set_userdata('chat_session_token', $chat_token);
+					$this->cleanOldChatSessions($newdata['makhachhang']);
+
 					if($this->session->has_userdata('lienhe')){
 			            return redirect(base_url('lien-he/'));
 			        }
@@ -123,9 +128,37 @@ class DangNhap extends MY_Controller {
 			    'diachi' => $this->Model_DangNhap->getInfoByUsername($taikhoan)[0]['DiaChi']
 			);
 			$this->session->set_userdata($newdata);
+
+			// Sinh session token cho chatbot và dọn dẹp các phiên cũ hơn 10
+			$chat_token = uniqid('chat_', true);
+			$this->session->set_userdata('chat_session_token', $chat_token);
+			$this->cleanOldChatSessions($newdata['makhachhang']);
+
 			return redirect(base_url('khach-hang/'));
 		}
 		return $this->load->view('Web/View_DangKy', $data);
+	}
+
+	private function cleanOldChatSessions($makhachhang) {
+		// Tìm các session_token của makhachhang này, sắp xếp theo thời gian mới nhất
+		$sql = "SELECT DISTINCT session_token, MIN(created_at) as earliest_msg 
+				FROM lichsu_chatbot 
+				WHERE makhachhang = ? 
+				GROUP BY session_token 
+				ORDER BY earliest_msg DESC";
+		$query = $this->db->query($sql, array($makhachhang));
+		$sessions = $query->result_array();
+
+		// Nếu số lượng session nhiều hơn 10, tìm những session cũ vượt quá giới hạn và xóa
+		if (count($sessions) > 10) {
+			$sessions_to_keep = array_slice($sessions, 0, 10);
+			$tokens_to_keep = array_column($sessions_to_keep, 'session_token');
+			
+			// Xóa tất cả tin nhắn của các session không nằm trong danh sách 10 session mới nhất
+			$this->db->where('makhachhang', $makhachhang);
+			$this->db->where_not_in('session_token', $tokens_to_keep);
+			$this->db->delete('lichsu_chatbot');
+		}
 	}
 
 }

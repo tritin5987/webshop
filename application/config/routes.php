@@ -100,6 +100,14 @@ $route['dang-nhap'] = 'Web/DangNhap';
 $route['dang-xuat'] = 'Web/DangXuat';
 $route['dang-ky'] = 'Web/DangNhap/register';
 
+$route['chatbot/get_categories'] = 'Web/Chatbot/get_categories';
+$route['chatbot/get_recommendations'] = 'Web/Chatbot/get_recommendations';
+$route['chatbot/check_order'] = 'Web/Chatbot/check_order';
+$route['chatbot/get_chat_history'] = 'Web/Chatbot/get_chat_history';
+$route['chatbot/save_chat'] = 'Web/Chatbot/save_chat';
+
+
+
 $route['gio-hang'] = 'Web/GioHang';
 $route['gio-hang/sua/(:any)/(:any)'] = 'Web/GioHang/updateNumber/$1/$2';
 $route['gio-hang/them/(:any)/(:any)'] = 'Web/GioHang/add/$1/$2';

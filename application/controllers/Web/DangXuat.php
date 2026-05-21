@@ -12,7 +12,7 @@ class DangXuat extends CI_Controller {
 
 	public function index()
 	{
-		$array_items = array('makhachhang', 'khachhang', 'hoten', 'sodienthoai', 'email', 'diachi');
+		$array_items = array('makhachhang', 'khachhang', 'hoten', 'sodienthoai', 'email', 'diachi', 'chat_session_token');
 		$this->session->unset_userdata($array_items);
 		return redirect(base_url('dang-nhap/'));
 	}
