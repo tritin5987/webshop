@@ -17503,10 +17503,10 @@
     ]
   },
   {
-    "name": "Tỉnh Đồng Nai",
+    "name": "Thành phố Đồng Nai",
     "code": 75,
     "codename": "dong_nai",
-    "division_type": "tỉnh",
+    "division_type": "thành phố trực thuộc trung ương",
     "phone_code": 251,
     "wards": [
       {
