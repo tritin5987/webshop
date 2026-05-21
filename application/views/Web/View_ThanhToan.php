@@ -196,69 +196,57 @@
         let selectedTinhName = '';
         let selectedHuyenName = '';
         let selectedXaName = '';
+        let localProvinces = [];
 
-        // Lấy danh sách tỉnh
-        function loadTinh() {
-            $.ajax({
-                url: 'https://vapi.vnappmob.com/api/v2/province/', // API lấy danh sách tỉnh
-                method: 'GET',
-                success: function (data) {
-                    $('#tinh').html('<option value="">Chọn Tỉnh / Thành Phố *</option>');
-                    data.results.forEach(function (item) {
-                        $('#tinh').append('<option value="' + item.province_id + '" data-name="' + item.province_name + '">' + item.province_name + '</option>');
-                    });
-                },
-                error: function () {
-                    alert('Không thể lấy danh sách tỉnh');
-                }
+        // Tải danh sách tỉnh/thành từ file JSON local
+        function loadLocalProvinces() {
+            $.getJSON('<?php echo base_url("public/web/assets/json/provinces.json"); ?>', function (data) {
+                localProvinces = data;
+                $('#tinh').html('<option value="">Chọn Tỉnh / Thành Phố *</option>');
+                localProvinces.forEach(function (province) {
+                    $('#tinh').append('<option value="' + province.code + '" data-name="' + province.name + '">' + province.name + '</option>');
+                });
+            }).fail(function () {
+                console.error('Không thể tải tệp bản đồ hành chính local.');
             });
         }
 
-        // Khi người dùng chọn tỉnh
+        // Khi người dùng chọn tỉnh/thành
         $('#tinh').on('change', function () {
-            var tinhCode = $(this).val();
+            var provinceCode = parseInt($(this).val());
             selectedTinhName = $('#tinh option:selected').data('name'); // Lấy tên tỉnh
-            if (tinhCode) {
-                $.ajax({
-                    url: 'https://vapi.vnappmob.com/api/v2/province/district/' + tinhCode, // API lấy danh sách huyện theo tỉnh
-                    method: 'GET',
-                    success: function (data) {
-                        $('#huyen').html('<option value="">Chọn Quận / Huyện *</option>');
-                        $('#xa').html('<option value="">Chọn Xã / Phường *</option>'); // Xóa danh sách xã khi thay đổi huyện
-                        data.results.forEach(function (item) {
-                            $('#huyen').append('<option value="' + item.district_id + '" data-name="' + item.district_name + '">' + item.district_name + '</option>');
-                        });
-                    },
-                    error: function () {
-                        alert('Không thể lấy danh sách huyện');
-                    }
-                });
-            } else {
-                $('#huyen').html('<option value="">Chọn Quận / Huyện *</option>');
-                $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
+
+            $('#huyen').html('<option value="">Chọn Quận / Huyện *</option>');
+            $('#xa').html('<option value="">Chọn Xã / Phường *</option>'); // Xóa danh sách xã khi thay đổi huyện
+
+            if (provinceCode) {
+                const province = localProvinces.find(p => p.code === provinceCode);
+                if (province && province.districts) {
+                    province.districts.forEach(function (district) {
+                        $('#huyen').append('<option value="' + district.code + '" data-name="' + district.name + '">' + district.name + '</option>');
+                    });
+                }
             }
         });
 
         // Khi người dùng chọn huyện
         $('#huyen').on('change', function () {
-            var huyenCode = $(this).val();
+            var districtCode = parseInt($(this).val());
             selectedHuyenName = $('#huyen option:selected').data('name'); // Lấy tên huyện
-            if (huyenCode) {
-                $.ajax({
-                    url: 'https://vapi.vnappmob.com/api/v2/province/ward/' + huyenCode, // API lấy danh sách xã theo huyện
-                    method: 'GET',
-                    success: function (data) {
-                        $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
-                        data.results.forEach(function (item) {
-                            $('#xa').append('<option value="' + item.ward_id + '" data-name="' + item.ward_name + '">' + item.ward_name + '</option>');
+
+            $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
+
+            if (districtCode) {
+                const provinceCode = parseInt($('#tinh').val());
+                const province = localProvinces.find(p => p.code === provinceCode);
+                if (province && province.districts) {
+                    const district = province.districts.find(d => d.code === districtCode);
+                    if (district && district.wards) {
+                        district.wards.forEach(function (ward) {
+                            $('#xa').append('<option value="' + ward.code + '" data-name="' + ward.name + '">' + ward.name + '</option>');
                         });
-                    },
-                    error: function () {
-                        alert('Không thể lấy danh sách xã');
                     }
-                });
-            } else {
-                $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
+                }
             }
         });
 
@@ -269,7 +257,7 @@
             $(".payment-text1").html("Quyét QR chuyển khoản bên dưới hệ thống sẽ tự động xác nhận thanh toán.");
         });
 
-        // Load tỉnh khi trang được mở
-        loadTinh();
+        // Kích hoạt tải dữ liệu local
+        loadLocalProvinces();
     });
 </script>
