@@ -47,9 +47,9 @@
                         <option value="">Chọn Tỉnh / Thành Phố *</option>
                     </select>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-3" style="display: none;">
                     <label class="label mb-2">Chọn Quận / Huyện</label>
-                    <select class="form-control" id="huyen" name="huyen" required>
+                    <select class="form-control" id="huyen" name="huyen">
                         <option value="">Chọn Quận / Huyện *</option>
                     </select>
                 </div>
@@ -194,58 +194,35 @@
 <script type="text/javascript">
     $(document).ready(function () {
         let selectedTinhName = '';
-        let selectedHuyenName = '';
         let selectedXaName = '';
         let localProvinces = [];
 
-        // Tải danh sách tỉnh/thành từ file JSON local
+        // Tải danh sách tỉnh/thành từ file JSON local V2 (Hệ thống 2 cấp: Tỉnh -> Phường/Xã)
         function loadLocalProvinces() {
-            $.getJSON('<?php echo base_url("public/web/assets/json/provinces.json"); ?>', function (data) {
+            $.getJSON('<?php echo base_url("public/web/assets/json/provinces_v2.json"); ?>', function (data) {
                 localProvinces = data;
                 $('#tinh').html('<option value="">Chọn Tỉnh / Thành Phố *</option>');
                 localProvinces.forEach(function (province) {
                     $('#tinh').append('<option value="' + province.code + '" data-name="' + province.name + '">' + province.name + '</option>');
                 });
             }).fail(function () {
-                console.error('Không thể tải tệp bản đồ hành chính local.');
+                console.error('Không thể tải tệp bản đồ hành chính local V2.');
             });
         }
 
-        // Khi người dùng chọn tỉnh/thành
+        // Khi người dùng chọn tỉnh/thành (V2: load trực tiếp danh sách phường/xã)
         $('#tinh').on('change', function () {
             var provinceCode = parseInt($(this).val());
             selectedTinhName = $('#tinh option:selected').data('name'); // Lấy tên tỉnh
 
-            $('#huyen').html('<option value="">Chọn Quận / Huyện *</option>');
-            $('#xa').html('<option value="">Chọn Xã / Phường *</option>'); // Xóa danh sách xã khi thay đổi huyện
+            $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
 
             if (provinceCode) {
                 const province = localProvinces.find(p => p.code === provinceCode);
-                if (province && province.districts) {
-                    province.districts.forEach(function (district) {
-                        $('#huyen').append('<option value="' + district.code + '" data-name="' + district.name + '">' + district.name + '</option>');
+                if (province && province.wards) {
+                    province.wards.forEach(function (ward) {
+                        $('#xa').append('<option value="' + ward.code + '" data-name="' + ward.name + '">' + ward.name + '</option>');
                     });
-                }
-            }
-        });
-
-        // Khi người dùng chọn huyện
-        $('#huyen').on('change', function () {
-            var districtCode = parseInt($(this).val());
-            selectedHuyenName = $('#huyen option:selected').data('name'); // Lấy tên huyện
-
-            $('#xa').html('<option value="">Chọn Xã / Phường *</option>');
-
-            if (districtCode) {
-                const provinceCode = parseInt($('#tinh').val());
-                const province = localProvinces.find(p => p.code === provinceCode);
-                if (province && province.districts) {
-                    const district = province.districts.find(d => d.code === districtCode);
-                    if (district && district.wards) {
-                        district.wards.forEach(function (ward) {
-                            $('#xa').append('<option value="' + ward.code + '" data-name="' + ward.name + '">' + ward.name + '</option>');
-                        });
-                    }
                 }
             }
         });
@@ -253,7 +230,7 @@
         // Khi người dùng chọn xã
         $('#xa').on('change', function () {
             selectedXaName = $('#xa option:selected').data('name'); // Lấy tên xã
-            $(".tinhhuyenxa").val(selectedXaName + ", " + selectedHuyenName + ", " + selectedTinhName);
+            $(".tinhhuyenxa").val(selectedXaName + ", " + selectedTinhName);
             $(".payment-text1").html("Quyét QR chuyển khoản bên dưới hệ thống sẽ tự động xác nhận thanh toán.");
         });
 
